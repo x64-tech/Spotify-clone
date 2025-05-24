@@ -1,8 +1,15 @@
-import app from "./config/app";
+import app from "./config/app.config";
 import { config } from "dotenv"
+import connectDB from "./config/db.config";
+import { connection } from "mongoose";
 
 config()
 
-app.listen(process.env.SERVER_PORT || 5000, () => {
-    console.log(`server running on port ${process.env.SERVER_PORT || 5000}`);
-});
+connectDB()
+
+connection.once("open", () => {
+    console.log("connected to database");
+    app.listen(process.env.SERVER_PORT || 5000, () => {
+        console.log("server started");
+    });
+})
